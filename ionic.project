@@ -1,0 +1,12 @@
+{
+  "name": "INSA X-Platform BLE",
+  "app_id": "fr.insa.telecom.blemobile",
+  "gulpStartupTasks": [
+    "sass",
+    "watch"
+  ],
+  "watchPatterns": [
+    "www/**/*",
+    "!www/lib/**/*"
+  ]
+}

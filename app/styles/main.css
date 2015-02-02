@@ -1,0 +1,33 @@
+/* Ionic Overrides */
+ion-content {
+  background: #F0F3F8;
+}
+
+.bar .title {
+  font-weight: bolder;
+}
+
+/* Helpers */
+
+.center {
+  text-align: center;
+}
+.pull-right {
+  float: right;
+}
+.inline {
+  display: inline;
+}
+
+i .big {
+  font-size:48px;
+}
+.huge {
+  font-size:26px;
+  margin-right:15px;
+}
+
+.no-margin {
+  margin-top: 0px;
+  margin-bottom: 0px;
+}

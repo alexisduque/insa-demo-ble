@@ -1,0 +1,42 @@
+<ion-view title="">
+  <ion-content class="has-header padding">
+    <div ng-show="error" class="center">
+      <button class="button button-clear button-assertive">
+        {{ error }}
+      </button>
+      <br>
+    </div>
+    <button ng-show="!scanning && !connected" class="button button-block button-assertive button-outline icon-left" ng-click="onStartScanButton()">
+      <b>Déconnecté</b>
+    </button>
+    <button ng-show="scanning" class="button button-block button-stable icon-left" ng-click="stopScan()">
+      <b>Scanning ...</b>
+    </button>
+    <ion-list>
+      <ion-item class="card item-icon-right" ng-repeat="device in $root.devices" type="item-text-wrap" style="padding-top:10px; padding-bottom: 10px;">
+        <h2>{{device.name}}</h2>
+        <div class="inline">{{device.address}}</div>
+        <div class="inline pull-right">{{device.rssi}}</div>
+         <i class="icon ion-chevron-right icon-accessory" ng-click="stopScan()"> </i>
+      </ion-item>
+    </ion-list>
+    <div class="list card no-margin" style="background-color: transparent">
+      <div class="row responsive-xs">
+        <div class="col">
+          <div class="item item-divider center">
+            Température
+          </div>
+          <div class="item item-icon-left center">
+            <i class="icon ion-thermometer"></i>
+            <p>{{ data.temp || 0 | number:2 }} <b>°C</b>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="list list-inset center no-margin" style="background-color: transparent">
+      <button class="button button-block button-dark" ng-click="airbag()" ng-class="{ 'enabled': ready == true, 'disabled':ready == false}" >
+         <b>Eclairage On/Off</b>
+      </button>
+    </div>
+  </ion-content>
+</ion-view>

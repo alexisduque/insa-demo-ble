@@ -1,0 +1,36 @@
+<ion-header-bar class="bar-dark nav-title-slide-ios7">
+    <div class="buttons">
+        <button class="button button-icon icon ion-ios-snowy"></button>
+    </div>
+   <h1 class="title">
+        <img class="title-image" src="images/logo_insable_white.png" style="max-height:30px; margin-top:6px;"></img>
+    </h1>
+    <div class="buttons">
+        <button class="button button-icon icon ion-bluetooth"></button>
+    </div>
+</ion-header-bar>
+
+<ion-tabs>
+  <ion-tab title="Discover" icon="icon ion-android-wifi">
+    <ion-nav-view name="tab-scan"></ion-nav-view>
+  </ion-tab>
+  <!-- Adopt Tab -->
+  <ion-tab title="Data" icon="icon ion-ios7-lightbulb">
+    <ion-nav-view name="tab-scan"></ion-nav-view>
+  </ion-tab>
+</ion-tabs>
+
+<div class="tabs tabs-icon-top tabs-dark ">
+    <a class="tab-item active" ng-show="scanning || connected" ng-click="stopScan()">
+        <i class="icon ion-ios7-lightbulb"></i>
+        ON
+    </a>
+    <a class="tab-item" ng-show="!scanning && !connected" ng-click="onStartScanButton()">
+        <i class="icon ion-power"></i>
+        OFF
+    </a>
+    <a class="tab-item" ng-click="reset()">
+        <i class="icon ion-loop"></i>
+        Reset BLE Interface
+    </a>
+</div>
