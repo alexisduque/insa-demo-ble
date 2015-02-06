@@ -11,8 +11,9 @@ angular.module('controllers').controller('ScanCtrl', [
     $scope.device = {};
     $scope.connected = false;
     $scope.error = '';
-    $scope.data = {};
+    $scope.data = { temp: 0 };
     $scope.ready = true;
+    $scope.tempInterval = null;
 
     $scope.displayStatus = function(status) {
       $scope.status = status;
@@ -24,8 +25,7 @@ angular.module('controllers').controller('ScanCtrl', [
       $scope.lastScanEvent = new Date();
       $scope.runScanTimer();
       console.log('Scan started...');
-      InsaBle.startScan($scope.deviceFound, $scope.handleError, $scope.onAccelerometerData, 
-        $scope.onGyroscopeData, $scope.onButtonData, $scope.onTemperatureData);
+      InsaBle.startScan($scope.deviceFound, $scope.handleError, $scope.onTemperatureData);
     };
 
     // Stop scanning for devices.
@@ -36,14 +36,13 @@ angular.module('controllers').controller('ScanCtrl', [
       InsaBle.stopScan();
       $rootScope.devices = {};
       if (angular.isDefined($scope.device.address)) {
-        //$scope.device.disconnect();
         $scope.device = {};
-        //$scope.ready = false;
       }
     };
 
     // Called when Start Scan button is selected.
     $scope.onStartScanButton = function() {
+      $scope.tempInterval = setInterval($scope.onTemperatureData, 500);
       $rootScope.devices = {};
       $scope.startScan();
       $scope.displayStatus('Scanning...');
@@ -53,6 +52,7 @@ angular.module('controllers').controller('ScanCtrl', [
     $scope.onStopScanButton = function() {
       if ($scope.scanning) {
         $scope.stopScan();
+        clearInterval($scope.tempInterval);
       }
       $scope.displayStatus('Scan Paused');
     };
@@ -68,12 +68,21 @@ angular.module('controllers').controller('ScanCtrl', [
           $rootScope.devices[device.address] = device;
           $scope.data.temp = 21.4;
         });
+        $scope.tempInterval = setInterval($scope.onTemperatureData, 500);
         console.log('Device found:' + device.address);
         console.log(' RSSI: ' + device.rssi);
         console.log(' Raw: ' + device.scanRecord);
         console.log(' Name: ' + device.name);
       }
     };
+
+    function getRandomArbitary(min, max) {
+      return Math.random() * (max - min) + min;
+    }
+
+    function getRandomInt(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
 
     $scope.runScanTimer = function() {
       if ($scope.scanning)
@@ -95,57 +104,11 @@ angular.module('controllers').controller('ScanCtrl', [
       });
     };
 
-    $scope.onAccelerometerData = function(dataArray) {
-      $scope.$apply(function() {
-        $scope.data.accelerometer = dataArray;
-      });
-    };
-
-    $scope.onTemperatureData = function(dataArray) {
-      $scope.$apply(function() {
-        $scope.data.temperature = dataArray;
-      });
-    };
-
-    $scope.onButtonData = function(dataArray) {
-      $scope.$apply(function() {
-        $scope.data.button = dataArray;
-      });
-    };
-
-    $scope.onGyroscopeData = function(dataArray) {
-      $scope.$apply(function() {
-        $scope.data.gyroscope = dataArray;
-      });
-    };
-
-    $scope.onGpsLatData = function(data) {
-      $scope.$apply(function() {
-        $scope.data.gps.lat = dataArray;
-      });
-    };
-
-    $scope.onGpsLngData = function(data) {
-      $scope.$apply(function() {
-        $scope.data.gps.lng = dataArray;
-      });
-    };
-
-    $scope.onGpsLatDirData = function(data) {
-      $scope.$apply(function() {
-        $scope.data.gps.latDir = dataArray;
-      });
-    };
-
-    $scope.onGpsLngData = function(data) {
-      $scope.$apply(function() {
-        $scope.data.gps.lngDir = dataArray;
-      });
-    };
-    $scope.onGpsSpeedData = function(data) {
-      $scope.$apply(function() {
-        $scope.data.gps.speed = dataArray;
-      });
+    $scope.onTemperatureData = function() {
+        console.log('new temp');
+        $scope.$apply(function() {
+          $scope.data.temp = getRandomArbitary(24, 33);
+        });
     };
 
     $scope.reset = function() {
@@ -158,32 +121,18 @@ angular.module('controllers').controller('ScanCtrl', [
       $rootScope.services = {};
       $rootScope.connected = 0;
       evothings.ble.reset();
+      clearInterval($scope.tempInterval);
     };
 
-    $scope.airbag = function() {
+    $scope.light = function() {
       if (angular.isDefined($scope.device.__services)) {
         InsaBle.writeAirbag($scope.device);
       }
     };
-    $scope.isReady = function() {
-      if ($scope.device.__services) {
-        if ($scope.device.__services && $scope.device.__services.length > 1 &&
-         $scope.ready == false) {
-          $scope.ready = true;
-        } else if ($scope.ready == true) {
-          $scope.ready = false;
-        }
-        if ($scope.readyTimer) { clearTimeout($scope.readyTimer); }
-      }
-      $scope.readyTimer = setTimeout($scope.isReady, 1000);
-    };
-
-    //$scope.isReady();
 
     $scope.$on('$destroy', function() {
       $scope.stopScan();
     });
-
 
   }
 ]);

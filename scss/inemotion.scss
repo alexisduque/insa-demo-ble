@@ -1,6 +1,0 @@
-// your variable changes can go here
-$dark:                  #444 !default;
-$grid-responsive-xs-break:  350px !default;
-
-@import "../app/lib/ionic/scss/ionic";
-@include responsive-grid-break('.responsive-xs', $grid-responsive-xs-break);

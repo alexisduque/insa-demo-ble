@@ -32,7 +32,7 @@ module.exports = function (grunt) {
     sass: {
       dist: {
         files: {
-          '<%= yeoman.dist %>/<%= yeoman.styles %>/ionic.inemotion.css' : 'scss/inemotion.scss'
+          '<%= yeoman.dist %>/<%= yeoman.styles %>/ionic.insable.css' : 'scss/insable.scss'
         }
       }
     },
